@@ -1,5 +1,5 @@
 {
-  "buildCommand": "vite build",
+  "buildCommand": "vite build && cp simulador.html dist/simulador.html",
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [

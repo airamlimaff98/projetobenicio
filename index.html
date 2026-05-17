@@ -235,7 +235,7 @@
           <button class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-sm sm:text-base font-medium" data-banco="elo-outras" role="tab" aria-selected="false">Elo / Outras</button>
         </div>
 
-        <!-- Grid de inputs: Montante + Juros de Entrada -->
+        <!-- Grid de inputs: Montante + Select de Letras -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           <!-- Montante -->
           <div>
@@ -249,17 +249,15 @@
                 onblur="this.style.borderColor='var(--bg-border)';this.style.boxShadow='none'" />
             </div>
           </div>
-          <!-- Juros de Entrada % (público) -->
+          <!-- Select de Letras (Juros) -->
           <div>
-            <label for="inputJurosEntrada" class="block text-sm font-medium mb-1.5" style="color:var(--text-primary);">Juros de Entrada (%)</label>
-            <div class="relative">
-              <input id="inputJurosEntrada" type="number" step="0.01" min="0" placeholder="5,00"
-                class="w-full px-3 py-2.5 rounded-lg text-sm sm:text-base transition-colors"
-                style="background:var(--bg-app);border:1px solid var(--bg-border);color:var(--text-primary);"
-                onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 2px var(--accent-dim-20)'"
-                onblur="this.style.borderColor='var(--bg-border)';this.style.boxShadow='none'" />
-              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-medium" style="color:var(--text-muted);">%</span>
-            </div>
+            <label for="selectLetra" class="block text-sm font-medium mb-1.5" style="color:var(--text-primary);">Taxa de Juros</label>
+            <select id="selectLetra"
+              class="w-full px-3 py-2.5 rounded-lg text-sm sm:text-base transition-colors cursor-pointer"
+              style="background:var(--bg-app);border:1px solid var(--bg-border);color:var(--text-primary);"
+              onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 2px var(--accent-dim-20)'"
+              onblur="this.style.borderColor='var(--bg-border)';this.style.boxShadow='none'">
+            </select>
           </div>
         </div>
 
@@ -289,7 +287,7 @@
           <svg class="w-12 h-12 mx-auto mb-3" style="color:var(--bg-border);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
           </svg>
-          <p class="text-sm" style="color:var(--text-dim);">Informe o valor, o juros de entrada e selecione o banco</p>
+          <p class="text-sm" style="color:var(--text-dim);">Informe o valor e selecione a letra da taxa de juros</p>
         </div>
       </div>
 
@@ -307,13 +305,13 @@
           <button id="btnLogout" class="text-xs underline transition-colors cursor-pointer" style="color:var(--text-muted);">Sair do modo admin</button>
         </div>
 
-        <!-- Juros de Entrada padrão (visível só no admin) -->
+        <!-- Configuração das Letras (A-L) -->
         <div class="mb-6 p-4 rounded-lg border" style="background:var(--bg-surface-alt);border-color:var(--bg-border);">
-          <label class="block text-xs font-medium mb-1" style="color:var(--text-muted);">Juros de Entrada Padrão (%)</label>
-          <p class="text-sm" style="color:var(--text-primary);">
-            O valor padrão sugerido é <strong style="color:var(--accent);">5,00%</strong>.
-            O usuário pode digitar qualquer valor no campo público acima.
-          </p>
+          <div class="flex items-center justify-between mb-3">
+            <label class="block text-xs font-medium" style="color:var(--text-muted);">Valores de cada Letra (%)</label>
+            <button id="btnRestaurarLetras" class="text-xs underline cursor-pointer" style="color:var(--accent);">Restaurar padrões</button>
+          </div>
+          <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2" id="letrasGrid"></div>
         </div>
 
         <!-- Grid Master / Elo -->
@@ -423,6 +421,22 @@
       //      - jurosFixoPercentual: aplicado como (Valor1 * % / 100)
       //      - fator: dividido no cálculo final
       // ===========================================================
+
+      // ===========================================================
+      // 2.1. VALORES DAS LETRAS (A-L)
+      // ===========================================================
+      const JUROS_LETRAS_PADRAO = {
+        A: 10, B: 9, C: 8, D: 7, E: 6, F: 5,
+        G: 4.5, H: 4, I: 3.5, J: 3, K: 2.5, L: 2,
+      };
+      let jurosLetras = {};
+
+      function deepCopy(o) { return JSON.parse(JSON.stringify(o)); }
+
+      function resetJurosLetras() {
+        jurosLetras = deepCopy(JUROS_LETRAS_PADRAO);
+      }
+      resetJurosLetras();
       const TAXAS_PADRAO = {
         'master-visa': {
           taxas: [
@@ -487,8 +501,6 @@
 
       // Cópia editável
       const dados = {};
-      function deepCopy(o) { return JSON.parse(JSON.stringify(o)); }
-
       function salvarDados() {
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
@@ -544,7 +556,7 @@
 
       const tabs             = $$('.tab-btn');
       const inputMontante    = $('#inputMontante');
-      const inputJurosEntrada= $('#inputJurosEntrada');
+      const selectLetra      = $('#selectLetra');
       const tabelaContainer  = $('#tabelaContainer');
       const tabelaBody       = $('#tabelaBody');
       const emptyState       = $('#emptyState');
@@ -555,6 +567,8 @@
       const adminPanel       = $('#adminPanel');
       const taxasGridMV      = $('#taxasGridMV');
       const taxasGridEO      = $('#taxasGridEO');
+      const letrasGrid       = $('#letrasGrid');
+      const btnRestaurarLetras = $('#btnRestaurarLetras');
 
       const modalOverlay     = $('#modalOverlay');
       const inputSenha       = $('#inputSenha');
@@ -630,9 +644,20 @@
       // ===========================================================
       // 8. RENDERIZAR TABELA PÚBLICA
       // ===========================================================
+      function renderizarSelectLetra() {
+        let html = '';
+        const letras = Object.keys(jurosLetras);
+        const letraAtual = selectLetra.value || letras[0];
+        letras.forEach(l => {
+          const selected = l === letraAtual ? ' selected' : '';
+          html += '<option value="' + l + '"' + selected + '>' + l + '</option>';
+        });
+        selectLetra.innerHTML = html;
+      }
       function renderizarTabela() {
         const mont = obterMontanteNumerico();
-        const jurosEntrada = parseFloat(inputJurosEntrada.value) || 0;
+        const letra = selectLetra.value;
+        const jurosEntrada = jurosLetras[letra] || 0;
 
         if (mont <= 0 || jurosEntrada <= 0) {
           tabelaContainer.classList.add('hidden');
@@ -661,6 +686,32 @@
       // ===========================================================
       // 9. RENDERIZAR GRID DE TAXAS NO ADMIN
       // ===========================================================
+      function renderizarLetrasAdmin() {
+        let html = '';
+        Object.keys(jurosLetras).forEach(l => {
+          const val = jurosLetras[l];
+          html += '<div class=\"rounded-md border p-2\" style=\"background:var(--bg-app);border-color:var(--bg-border-light);\">' +
+            '<span class=\"block text-xs font-bold text-center mb-1\" style=\"color:var(--text-muted);\">Letra ' + l + '</span>' +
+            '<div class=\"flex items-center gap-1\">' +
+              '<input type=\"number\" step=\"0.1\" min=\"0\" class=\"juros-letra-input w-full px-1 py-1 rounded text-xs text-center\" data-letra=\"' + l + '\" value=\"' + val + '\" ' +
+                'style=\"background:transparent;border:1px solid var(--bg-border);color:var(--text-primary);\" ' +
+                'onfocus=\"this.style.borderColor=\\'var(--accent)\\';this.style.outline=\\'none\\'\" ' +
+                'onblur=\"this.style.borderColor=\\'var(--bg-border)\\'\" />' +
+              '<span class=\"text-xs\" style=\"color:var(--text-muted);\">%</span>' +
+            '</div>' +
+          '</div>';
+        });
+        letrasGrid.innerHTML = html;
+
+        letrasGrid.querySelectorAll('.juros-letra-input').forEach(inp => {
+          inp.addEventListener('input', function() {
+            const l = this.dataset.letra;
+            jurosLetras[l] = parseFloat(this.value) || 0;
+            renderizarSelectLetra();
+            renderizarTabela();
+          });
+        });
+      }
       function renderizarTaxasAdmin() {
         function montarGrid(bancoKey, container) {
           const banco = dados[bancoKey];
@@ -718,6 +769,7 @@
           state.adminLogado = true;
           fecharModal();
           adminPanel.classList.add('open');
+          renderizarLetrasAdmin();
           renderizarTaxasAdmin();
         } else {
           senhaErroMsg.textContent = 'Senha incorreta. Tente novamente.';
@@ -762,7 +814,7 @@
 
       // Inputs públicos
       inputMontante.addEventListener('input', renderizarTabela);
-      inputJurosEntrada.addEventListener('input', renderizarTabela);
+      selectLetra.addEventListener('change', renderizarTabela);
 
       // Admin cadeado
       btnAdmin.addEventListener('click', () => {
@@ -791,19 +843,30 @@
         btn.addEventListener('click', function() { resetTaxas(this.dataset.banco); });
       });
 
+      // Restaurar letras (admin)
+      btnRestaurarLetras.addEventListener('click', function() {
+        resetJurosLetras();
+        renderizarLetrasAdmin();
+        renderizarSelectLetra();
+        renderizarTabela();
+      });
+
       // ===========================================================
       // 13. INICIALIZAÇÃO
       // ===========================================================
       yearFooter.textContent = new Date().getFullYear();
       state.bancoAtivo = 'master-visa';
 
+      // Renderiza o select de letras
+      renderizarSelectLetra();
+
       // Valores de demonstração
       inputMontante.value = '1.000,00';
-      inputJurosEntrada.value = '5.00';
+      selectLetra.value = 'F';
 
       renderizarTabela();
 
-      console.log('✅ Simulador  (com Juros de Entrada %)');
+      console.log('✅ Simulador  (com Letras A-L de Juros)');
       console.log('🔐 Senha admin:', ADMIN_PASSWORD);
       console.log('📊 Tabela Master/Visa:', TAXAS_PADRAO['master-visa'].taxas);
       console.log('📊 Tabela Elo/Outras:', TAXAS_PADRAO['elo-outras'].taxas);

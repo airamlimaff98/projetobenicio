@@ -2,10 +2,26 @@ import { useState, useCallback } from 'react'
 
 const ADMIN_PASSWORD = 'admin123'
 
+const JUROS_PADRAO: Record<string, number> = {
+  A: 10,
+  B: 9,
+  C: 8,
+  D: 7,
+  E: 6,
+  F: 5,
+  G: 4.5,
+  H: 4,
+  I: 3.5,
+  J: 3,
+  K: 2.5,
+  L: 2,
+}
+
 function App() {
   const [montante, setMontante] = useState<string>('')
   const [valorFinal, setValorFinal] = useState<number | null>(null)
-  const [juros1, setJuros1] = useState<number>(0.05)
+  const [letraSelecionada, setLetraSelecionada] = useState<string>('F')
+  const [jurosLetras, setJurosLetras] = useState<Record<string, number>>({ ...JUROS_PADRAO })
   const [fator, setFator] = useState<number>(1.2)
   const [isAdminUnlocked, setIsAdminUnlocked] = useState(false)
   const [showPasswordModal, setShowPasswordModal] = useState(false)
@@ -17,9 +33,10 @@ function App() {
     const mont = parseFloat(montante)
     if (isNaN(mont) || mont <= 0) return
 
-    const resultado = (mont + juros1) / fator
+    const jurosPct = jurosLetras[letraSelecionada] || 0
+    const resultado = (mont + (mont * jurosPct / 100)) / fator
     setValorFinal(resultado)
-  }, [montante, juros1, fator])
+  }, [montante, letraSelecionada, jurosLetras, fator])
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -149,6 +166,31 @@ function App() {
               </div>
             </div>
 
+            {/* Select de Letras (Juros) */}
+            <div>
+              <label
+                htmlFor="letraJuros"
+                className="block text-sm font-medium text-text dark:text-dark-text mb-1.5"
+              >
+                Taxa de Juros
+              </label>
+              <select
+                id="letraJuros"
+                value={letraSelecionada}
+                onChange={(e) => {
+                  setLetraSelecionada(e.target.value)
+                  setValorFinal(null)
+                }}
+                className="w-full px-3 py-2.5 rounded-lg border border-border dark:border-dark-border bg-surface dark:bg-dark-surface text-text dark:text-dark-text focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary text-sm sm:text-base transition-colors cursor-pointer"
+              >
+                {Object.keys(jurosLetras).map((letra) => (
+                  <option key={letra} value={letra}>
+                    {letra} — {jurosLetras[letra].toFixed(1).replace('.', ',')}%
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Botão Calcular */}
             <button
               onClick={calcular}
@@ -168,7 +210,7 @@ function App() {
                   {formatCurrency(valorFinal)}
                 </div>
                 <p className="text-xs text-text-light dark:text-dark-text-muted text-center mt-2">
-                  * Valor calculado com base nas taxas vigentes
+                  * Letra {letraSelecionada} — Juros de {jurosLetras[letraSelecionada].toFixed(1).replace('.', ',')}%
                 </p>
               </div>
             )}
@@ -200,58 +242,81 @@ function App() {
                   />
                 </svg>
                 <h2 className="text-base sm:text-lg font-semibold text-text dark:text-dark-text">
-                  Configurações Avançadas
+                  Configuração das Letras (A-L)
                 </h2>
               </div>
               <button
-                onClick={handleLogout}
-                className="text-xs text-text-muted dark:text-dark-text-muted hover:text-danger transition-colors underline cursor-pointer"
+                onClick={() => {
+                  setJurosLetras({ ...JUROS_PADRAO })
+                }}
+                className="text-xs text-text-muted dark:text-dark-text-muted hover:text-accent transition-colors underline cursor-pointer"
               >
-                Sair do modo admin
+                Restaurar padrões
               </button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Juros 1 */}
-              <div>
-                <label
-                  htmlFor="juros1"
-                  className="block text-xs font-medium text-text-muted dark:text-dark-text-muted mb-1"
-                >
-                  Juros 1
-                </label>
-                <input
-                  id="juros1"
-                  type="number"
-                  step="0.001"
-                  value={juros1}
-                  onChange={(e) => setJuros1(parseFloat(e.target.value) || 0)}
-                  className="w-full px-3 py-2 rounded-lg border border-border dark:border-dark-border bg-surface dark:bg-dark-surface text-text dark:text-dark-text text-sm focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                />
-              </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+              {Object.entries(jurosLetras).map(([letra, valor]) => (
+                <div key={letra} className="bg-surface-alt dark:bg-dark-surface rounded-lg border border-border dark:border-dark-border p-3">
+                  <label
+                    htmlFor={`juros-${letra}`}
+                    className="block text-xs font-bold text-text-muted dark:text-dark-text-muted mb-1 text-center"
+                  >
+                    Letra {letra}
+                  </label>
+                  <div className="flex items-center gap-1">
+                    <input
+                      id={`juros-${letra}`}
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      value={valor}
+                      onChange={(e) => {
+                        setJurosLetras((prev) => ({
+                          ...prev,
+                          [letra]: parseFloat(e.target.value) || 0,
+                        }))
+                      }}
+                      className="w-full px-2 py-1.5 rounded-md border border-border dark:border-dark-border bg-surface dark:bg-dark-surface text-text dark:text-dark-text text-sm text-center focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <span className="text-xs text-text-muted dark:text-dark-text-muted">%</span>
+                  </div>
+                </div>
+              ))}
+            </div>
 
-              {/* Fator */}
-              <div>
-                <label
-                  htmlFor="fator"
-                  className="block text-xs font-medium text-text-muted dark:text-dark-text-muted mb-1"
-                >
-                  Fator
-                </label>
-                <input
-                  id="fator"
-                  type="number"
-                  step="0.001"
-                  value={fator}
-                  onChange={(e) => setFator(parseFloat(e.target.value) || 0)}
-                  className="w-full px-3 py-2 rounded-lg border border-border dark:border-dark-border bg-surface dark:bg-dark-surface text-text dark:text-dark-text text-sm focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                />
+            <div className="mt-5 pt-4 border-t border-border dark:border-dark-border">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Fator */}
+                <div>
+                  <label
+                    htmlFor="fator"
+                    className="block text-xs font-medium text-text-muted dark:text-dark-text-muted mb-1"
+                  >
+                    Fator
+                  </label>
+                  <input
+                    id="fator"
+                    type="number"
+                    step="0.001"
+                    value={fator}
+                    onChange={(e) => setFator(parseFloat(e.target.value) || 0)}
+                    className="w-full px-3 py-2 rounded-lg border border-border dark:border-dark-border bg-surface dark:bg-dark-surface text-text dark:text-dark-text text-sm focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                </div>
               </div>
             </div>
 
             <p className="text-xs text-text-light dark:text-dark-text-muted mt-3">
-              Altere os valores acima para recalcular com novas taxas.
+              Altere os valores acima para personalizar as taxas de cada letra.
             </p>
+
+            <button
+              onClick={handleLogout}
+              className="mt-4 w-full py-2 rounded-lg border border-danger/40 text-danger text-sm hover:bg-danger/10 transition-colors cursor-pointer"
+            >
+              Sair do modo admin
+            </button>
           </div>
         )}
       </main>

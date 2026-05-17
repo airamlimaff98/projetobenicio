@@ -1,5 +1,4 @@
 {
-  "buildCommand": "cp simulador.html index.html",
   "outputDirectory": ".",
   "framework": null
 }

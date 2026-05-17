@@ -251,7 +251,7 @@
           </div>
           <!-- Select de Letras (Juros) -->
           <div>
-            <label for="selectLetra" class="block text-sm font-medium mb-1.5" style="color:var(--text-primary);">Taxa de Juros</label>
+            <label for="selectLetra" class="block text-sm font-medium mb-1.5" style="color:var(--text-primary);">Comissão %</label>
             <select id="selectLetra"
               class="w-full px-3 py-2.5 rounded-lg text-sm sm:text-base transition-colors cursor-pointer"
               style="background:var(--bg-app);border:1px solid var(--bg-border);color:var(--text-primary);"
@@ -273,6 +273,7 @@
                 <tr>
                   <th class="text-left">Parcelas</th>
                   <th class="text-right">Valor da Parcela</th>
+                  <th class="text-right">Comissão R$</th>
                   <th class="text-right">Total Final</th>
                 </tr>
               </thead>
@@ -662,6 +663,7 @@
           return;
         }
 
+        const jurosReais = mont * jurosEntrada / 100;
         const banco = getBanco();
         const dadosCalc = calcularTodas(mont, jurosEntrada, banco);
         bancoLabel.textContent = getLabel();
@@ -671,7 +673,8 @@
           html += '<tr>' +
             '<td class="font-medium" style="color:var(--text-primary);">' + p.qtd + 'x</td>' +
             '<td class="text-right" style="color:var(--text-muted);">' + fmtMoeda(p.parcela) + '</td>' +
-            '<td class="text-right font-semibold" style="color:var(--accent);">' + fmtMoeda(p.valorFinal) + '</td>' +
+            '<td class="text-right font-medium" style="color:var(--accent);">' + fmtMoeda(jurosReais) + '</td>' +
+            '<td class="text-right font-semibold" style="color:var(--text-primary);">' + fmtMoeda(p.valorFinal) + '</td>' +
           '</tr>';
         });
         tabelaBody.innerHTML = html;

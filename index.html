@@ -645,8 +645,9 @@
         const letras = Object.keys(jurosLetras);
         const letraAtual = selectLetra.value || letras[0];
         letras.forEach(l => {
+          const val = jurosLetras[l];
           const selected = l === letraAtual ? ' selected' : '';
-          html += '<option value="' + l + '"' + selected + '>' + l + '</option>';
+          html += '<option value="' + l + '"' + selected + '>' + l + ' (' + val + '%)</option>';
         });
         selectLetra.innerHTML = html;
       }

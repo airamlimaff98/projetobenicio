@@ -26,20 +26,66 @@
     }
   </script>
   <style>
+    :root {
+      --bg-app: #050505;
+      --bg-surface: #0a0a0a;
+      --bg-surface-alt: #0d0d0d;
+      --bg-border: #1e1e1e;
+      --bg-border-light: #1a1a1a;
+      --bg-hover: #111;
+      --bg-tab-hover: #1a1a1a;
+      --text-primary: #f5f5f5;
+      --text-muted: #a0a0a0;
+      --text-dim: #3a3a3a;
+      --accent: #C5A059;
+      --accent-hover: #d4af6a;
+      --accent-dim: #C5A05915;
+      --accent-dim-20: #C5A05920;
+      --accent-dim-30: #C5A05930;
+      --btn-gold-text: #050505;
+      --scrollbar-thumb: #2a2a2a;
+      --selection-bg: #C5A05940;
+      --modal-overlay: rgba(0,0,0,0.7);
+      --border-default: #C5A059;
+    }
+
+    .light {
+      --bg-app: #f5f5f5;
+      --bg-surface: #ffffff;
+      --bg-surface-alt: #fafafa;
+      --bg-border: #d4d4d4;
+      --bg-border-light: #d0d0d0;
+      --bg-hover: #e8e8e8;
+      --bg-tab-hover: #ebebeb;
+      --text-primary: #1a1a1a;
+      --text-muted: #666666;
+      --text-dim: #999999;
+      --accent: #B8943A;
+      --accent-hover: #9E7E30;
+      --accent-dim: #B8943A15;
+      --accent-dim-20: #B8943A20;
+      --accent-dim-30: #B8943A30;
+      --btn-gold-text: #ffffff;
+      --scrollbar-thumb: #c0c0c0;
+      --selection-bg: #B8943A40;
+      --modal-overlay: rgba(0,0,0,0.3);
+    }
+
     * { box-sizing: border-box; }
     body {
-      background: #050505;
-      color: #f5f5f5;
+      background: var(--bg-app);
+      color: var(--text-primary);
       font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
       -webkit-font-smoothing: antialiased;
+      transition: background 0.3s, color 0.3s;
     }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
     input[type="number"]::-webkit-outer-spin-button,
     input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     input[type="number"] { -moz-appearance: textfield; }
-    ::selection { background: #C5A05940; color: #f5f5f5; }
+    ::selection { background: var(--selection-bg); color: var(--text-primary); }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
@@ -54,22 +100,22 @@
 
     .tab-btn { transition: all 0.2s; border: 1px solid transparent; cursor: pointer; }
     .tab-btn.active {
-      background: #C5A059; color: #050505; border-color: #C5A059; font-weight: 600;
+      background: var(--accent); color: var(--btn-gold-text); border-color: var(--accent); font-weight: 600;
     }
     .tab-btn:not(.active) {
-      background: #111; color: #a0a0a0; border-color: #1e1e1e;
+      background: var(--bg-hover); color: var(--text-muted); border-color: var(--bg-border);
     }
-    .tab-btn:not(.active):hover { background: #1a1a1a; color: #f5f5f5; }
+    .tab-btn:not(.active):hover { background: var(--bg-tab-hover); color: var(--text-primary); }
 
     .tbl-public th {
-      background: #111; color: #a0a0a0; font-weight: 500;
+      background: var(--bg-hover); color: var(--text-muted); font-weight: 500;
       text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem;
-      padding: 12px 16px; border-bottom: 1px solid #1e1e1e;
+      padding: 12px 16px; border-bottom: 1px solid var(--bg-border);
     }
     .tbl-public td {
-      padding: 10px 16px; border-bottom: 1px solid #1a1a1a; font-size: 0.875rem;
+      padding: 10px 16px; border-bottom: 1px solid var(--bg-border-light); font-size: 0.875rem;
     }
-    .tbl-public tr:hover td { background: #0d0d0d; }
+    .tbl-public tr:hover td { background: var(--bg-surface-alt); }
     .tbl-public tr:last-child td { border-bottom: none; }
 
     .admin-panel {
@@ -80,25 +126,25 @@
     .admin-panel.open { max-height: 5000px; opacity: 1; margin-top: 24px; }
 
     .input-gold {
-      background: #0d0d0d; border: 1px solid #1e1e1e; color: #f5f5f5;
+      background: var(--bg-surface-alt); border: 1px solid var(--bg-border); color: var(--text-primary);
       transition: border-color 0.2s, box-shadow 0.2s;
     }
     .input-gold:focus {
-      border-color: #C5A059; box-shadow: 0 0 0 2px #C5A05920; outline: none;
+      border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-dim-20); outline: none;
     }
 
     .btn-gold {
-      background: #C5A059; color: #050505; font-weight: 600;
+      background: var(--accent); color: var(--btn-gold-text); font-weight: 600;
       transition: background 0.2s, transform 0.15s; cursor: pointer;
     }
-    .btn-gold:hover { background: #d4af6a; }
+    .btn-gold:hover { background: var(--accent-hover); }
     .btn-gold:active { transform: scale(0.97); }
 
     .btn-outline {
-      border: 1px solid #1e1e1e; color: #a0a0a0;
+      border: 1px solid var(--bg-border); color: var(--text-muted);
       transition: all 0.2s; cursor: pointer;
     }
-    .btn-outline:hover { border-color: #C5A059; color: #C5A059; }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
     .taxas-grid {
       display: grid;
@@ -106,37 +152,62 @@
       gap: 4px;
     }
     .taxa-item {
-      background: #050505;
-      border: 1px solid #1a1a1a;
+      background: var(--bg-app);
+      border: 1px solid var(--bg-border-light);
       border-radius: 4px;
       padding: 3px 4px;
     }
     .taxa-item .t-label {
-      font-size: 0.55rem; color: #a0a0a0; text-align: center;
+      font-size: 0.55rem; color: var(--text-muted); text-align: center;
       display: block; margin-bottom: 1px;
     }
     .taxa-item .t-row { display: flex; gap: 2px; }
     .taxa-item input {
       width: 50%; padding: 2px 2px; background: transparent;
-      border: none; color: #f5f5f5; font-size: 0.65rem; text-align: center;
+      border: none; color: var(--text-primary); font-size: 0.65rem; text-align: center;
     }
-    .taxa-item input:focus { outline: none; color: #C5A059; }
+    .taxa-item input:focus { outline: none; color: var(--accent); }
 
-    .modal-overlay { background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); }
+    .modal-overlay { background: var(--modal-overlay); backdrop-filter: blur(4px); }
+
+    .theme-btn {
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid var(--bg-border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+    .theme-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
   </style>
 </head>
 <body>
 
   <!-- WRAPPER -->
-  <div id="app" class="min-h-svh flex flex-col" style="background:#050505;">
+  <div id="app" class="min-h-svh flex flex-col" style="background:var(--bg-app);">
 
     <!-- HEADER -->
-    <header class="border-b px-4 sm:px-6 py-3 flex items-center justify-between" style="background:#0a0a0a;border-color:#1e1e1e;">
+    <header class="border-b px-4 sm:px-6 py-3 flex items-center justify-between" style="background:var(--bg-surface);border-color:var(--bg-border);">
       <div class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#C5A059;color:#050505;">P</div>
+        <div class="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold" style="background:var(--accent);color:var(--btn-gold-text);">P</div>
         <div>
-          <span class="font-semibold text-sm sm:text-base" style="color:#f5f5f5;">Projeto Benício</span>
-          <span class="hidden sm:inline text-xs ml-2" style="color:#a0a0a0;">Auditoria Crede</span>
+          <span class="font-semibold text-sm sm:text-base" style="color:var(--text-primary);">Projeto Benício</span>
+          <span class="hidden sm:inline text-xs ml-2" style="color:var(--text-muted);">Auditoria Crede</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnTema" class="theme-btn" title="Alternar tema claro/escuro" type="button">
+            <svg id="temaIcon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
         </div>
       </div>
     </header>
@@ -145,17 +216,17 @@
     <main class="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
 
       <!-- CARD PRINCIPAL -->
-      <div class="rounded-2xl border p-5 sm:p-8 animate-in" style="background:#0a0a0a;border-color:#1e1e1e;">
+      <div class="rounded-2xl border p-5 sm:p-8 animate-in" style="background:var(--bg-surface);border-color:var(--bg-border);">
 
         <!-- Cabeçalho -->
         <div class="text-center mb-7">
-          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3" style="background:#C5A05915;">
-            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="#C5A059" stroke-width="1.5">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3" style="background:var(--accent-dim);">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="var(--accent)" stroke-width="1.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h1 class="text-xl sm:text-2xl font-bold" style="color:#f5f5f5;">Simulador de Empréstimo</h1>
-          <p class="text-sm mt-1" style="color:#a0a0a0;">Calcule as parcelas conforme a tabela Auditoria Crede</p>
+          <h1 class="text-xl sm:text-2xl font-bold" style="color:var(--text-primary);">Simulador de Empréstimo</h1>
+          <p class="text-sm mt-1" style="color:var(--text-muted);">Calcule as parcelas conforme a tabela Auditoria Crede</p>
         </div>
 
         <!-- Abas de banco -->
@@ -168,26 +239,26 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           <!-- Montante -->
           <div>
-            <label for="inputMontante" class="block text-sm font-medium mb-1.5" style="color:#f5f5f5;">Valor do Empréstimo (R$)</label>
+            <label for="inputMontante" class="block text-sm font-medium mb-1.5" style="color:var(--text-primary);">Valor do Empréstimo (R$)</label>
             <div class="relative montante-wrapper">
-              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium" style="color:#a0a0a0;">R$</span>
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium" style="color:var(--text-muted);">R$</span>
               <input id="inputMontante" type="text" inputmode="numeric" placeholder="0,00"
                 class="w-full pl-8 pr-3 py-2.5 rounded-lg text-sm sm:text-base transition-colors"
-                style="background:#050505;border:1px solid #1e1e1e;color:#f5f5f5;"
-                onfocus="this.style.borderColor='#C5A059';this.style.boxShadow='0 0 0 2px #C5A05920'"
-                onblur="this.style.borderColor='#1e1e1e';this.style.boxShadow='none'" />
+                style="background:var(--bg-app);border:1px solid var(--bg-border);color:var(--text-primary);"
+                onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 2px var(--accent-dim-20)'"
+                onblur="this.style.borderColor='var(--bg-border)';this.style.boxShadow='none'" />
             </div>
           </div>
           <!-- Juros de Entrada % (público) -->
           <div>
-            <label for="inputJurosEntrada" class="block text-sm font-medium mb-1.5" style="color:#f5f5f5;">Juros de Entrada (%)</label>
+            <label for="inputJurosEntrada" class="block text-sm font-medium mb-1.5" style="color:var(--text-primary);">Juros de Entrada (%)</label>
             <div class="relative">
               <input id="inputJurosEntrada" type="number" step="0.01" min="0" placeholder="5,00"
                 class="w-full px-3 py-2.5 rounded-lg text-sm sm:text-base transition-colors"
-                style="background:#050505;border:1px solid #1e1e1e;color:#f5f5f5;"
-                onfocus="this.style.borderColor='#C5A059';this.style.boxShadow='0 0 0 2px #C5A05920'"
-                onblur="this.style.borderColor='#1e1e1e';this.style.boxShadow='none'" />
-              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-medium" style="color:#a0a0a0;">%</span>
+                style="background:var(--bg-app);border:1px solid var(--bg-border);color:var(--text-primary);"
+                onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 2px var(--accent-dim-20)'"
+                onblur="this.style.borderColor='var(--bg-border)';this.style.boxShadow='none'" />
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-medium" style="color:var(--text-muted);">%</span>
             </div>
           </div>
         </div>
@@ -195,10 +266,10 @@
         <!-- Tabela de Resultados -->
         <div id="tabelaContainer" class="hidden">
           <div class="flex items-center justify-between mb-3">
-            <h2 class="text-sm font-semibold" style="color:#f5f5f5;">Opções de Parcelamento</h2>
-            <span id="bancoLabel" class="text-xs font-medium px-2.5 py-1 rounded-full" style="background:#C5A05920;color:#C5A059;"></span>
+            <h2 class="text-sm font-semibold" style="color:var(--text-primary);">Opções de Parcelamento</h2>
+            <span id="bancoLabel" class="text-xs font-medium px-2.5 py-1 rounded-full" style="background:var(--accent-dim-20);color:var(--accent);"></span>
           </div>
-          <div class="overflow-x-auto rounded-lg border" style="border-color:#1e1e1e;">
+          <div class="overflow-x-auto rounded-lg border" style="border-color:var(--bg-border);">
             <table class="w-full tbl-public">
               <thead>
                 <tr>
@@ -210,37 +281,37 @@
               <tbody id="tabelaBody"></tbody>
             </table>
           </div>
-          <p class="text-xs text-center mt-2" style="color:#3a3a3a;">* Conforme tabela Auditoria Crede</p>
+          <p class="text-xs text-center mt-2" style="color:var(--text-dim);">* Conforme tabela Auditoria Crede</p>
         </div>
 
         <!-- Estado vazio -->
         <div id="emptyState" class="text-center py-10">
-          <svg class="w-12 h-12 mx-auto mb-3" style="color:#1e1e1e;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <svg class="w-12 h-12 mx-auto mb-3" style="color:var(--bg-border);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
           </svg>
-          <p class="text-sm" style="color:#3a3a3a;">Informe o valor, o juros de entrada e selecione o banco</p>
+          <p class="text-sm" style="color:var(--text-dim);">Informe o valor, o juros de entrada e selecione o banco</p>
         </div>
       </div>
 
       <!-- PAINEL ADMIN -->
-      <div id="adminPanel" class="admin-panel rounded-2xl border p-5 sm:p-8" style="background:#0a0a0a;border-color:#C5A05930;">
+      <div id="adminPanel" class="admin-panel rounded-2xl border p-5 sm:p-8" style="background:var(--bg-surface);border-color:var(--accent-dim-30);">
 
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center gap-2.5">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="#C5A059" stroke-width="1.5">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="var(--accent)" stroke-width="1.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <h2 class="text-base sm:text-lg font-bold" style="color:#f5f5f5;">Configurações Avançadas</h2>
+            <h2 class="text-base sm:text-lg font-bold" style="color:var(--text-primary);">Configurações Avançadas</h2>
           </div>
-          <button id="btnLogout" class="text-xs underline transition-colors cursor-pointer" style="color:#a0a0a0;">Sair do modo admin</button>
+          <button id="btnLogout" class="text-xs underline transition-colors cursor-pointer" style="color:var(--text-muted);">Sair do modo admin</button>
         </div>
 
         <!-- Juros de Entrada padrão (visível só no admin) -->
-        <div class="mb-6 p-4 rounded-lg border" style="background:#0d0d0d;border-color:#1e1e1e;">
-          <label class="block text-xs font-medium mb-1" style="color:#a0a0a0;">Juros de Entrada Padrão (%)</label>
-          <p class="text-sm" style="color:#f5f5f5;">
-            O valor padrão sugerido é <strong style="color:#C5A059;">5,00%</strong>.
+        <div class="mb-6 p-4 rounded-lg border" style="background:var(--bg-surface-alt);border-color:var(--bg-border);">
+          <label class="block text-xs font-medium mb-1" style="color:var(--text-muted);">Juros de Entrada Padrão (%)</label>
+          <p class="text-sm" style="color:var(--text-primary);">
+            O valor padrão sugerido é <strong style="color:var(--accent);">5,00%</strong>.
             O usuário pode digitar qualquer valor no campo público acima.
           </p>
         </div>
@@ -249,44 +320,44 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
 
           <!-- MASTER / VISA -->
-          <div class="rounded-xl border p-4 sm:p-5" style="background:#0d0d0d;border-color:#1e1e1e;">
-            <h3 class="text-sm font-bold mb-4 flex items-center gap-2" style="color:#f5f5f5;">
-              <span class="w-2.5 h-2.5 rounded-full inline-block" style="background:#C5A059;"></span>
+          <div class="rounded-xl border p-4 sm:p-5" style="background:var(--bg-surface-alt);border-color:var(--bg-border);">
+            <h3 class="text-sm font-bold mb-4 flex items-center gap-2" style="color:var(--text-primary);">
+              <span class="w-2.5 h-2.5 rounded-full inline-block" style="background:var(--accent);"></span>
               Master / Visa
             </h3>
             <div>
               <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-medium" style="color:#a0a0a0;">% Juros Fixo / Fator (1x a 21x)</span>
-                <button class="btn-reset-taxas text-xs underline cursor-pointer" data-banco="master-visa" style="color:#C5A059;">Restaurar</button>
+                <span class="text-xs font-medium" style="color:var(--text-muted);">% Juros Fixo / Fator (1x a 21x)</span>
+                <button class="btn-reset-taxas text-xs underline cursor-pointer" data-banco="master-visa" style="color:var(--accent);">Restaurar</button>
               </div>
               <div class="taxas-grid" id="taxasGridMV"></div>
             </div>
           </div>
 
           <!-- ELO / OUTRAS -->
-          <div class="rounded-xl border p-4 sm:p-5" style="background:#0d0d0d;border-color:#1e1e1e;">
-            <h3 class="text-sm font-bold mb-4 flex items-center gap-2" style="color:#f5f5f5;">
-              <span class="w-2.5 h-2.5 rounded-full inline-block" style="background:#C5A059;"></span>
+          <div class="rounded-xl border p-4 sm:p-5" style="background:var(--bg-surface-alt);border-color:var(--bg-border);">
+            <h3 class="text-sm font-bold mb-4 flex items-center gap-2" style="color:var(--text-primary);">
+              <span class="w-2.5 h-2.5 rounded-full inline-block" style="background:var(--accent);"></span>
               Elo / Outras
             </h3>
             <div>
               <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-medium" style="color:#a0a0a0;">% Juros Fixo / Fator (1x a 21x)</span>
-                <button class="btn-reset-taxas text-xs underline cursor-pointer" data-banco="elo-outras" style="color:#C5A059;">Restaurar</button>
+                <span class="text-xs font-medium" style="color:var(--text-muted);">% Juros Fixo / Fator (1x a 21x)</span>
+                <button class="btn-reset-taxas text-xs underline cursor-pointer" data-banco="elo-outras" style="color:var(--accent);">Restaurar</button>
               </div>
               <div class="taxas-grid" id="taxasGridEO"></div>
             </div>
           </div>
         </div>
 
-        <p class="text-xs italic" style="color:#3a3a3a;">⚙️ Alterações nos parâmetros atualizam a tabela pública instantaneamente.</p>
+        <p class="text-xs italic" style="color:var(--text-dim);">⚙️ Alterações nos parâmetros atualizam a tabela pública instantaneamente.</p>
       </div>
     </main>
 
     <!-- FOOTER com cadeado -->
-    <footer class="border-t px-4 sm:px-6 py-4 flex items-center justify-between" style="border-color:#1e1e1e;background:#0a0a0a;">
-      <span class="text-xs" style="color:#3a3a3a;">&copy; <span id="yearFooter"></span> Projeto Benício — Auditoria Crede</span>
-      <button id="btnAdmin" class="p-2 rounded-lg transition-colors cursor-pointer" style="color:#3a3a3a;" title="Configurações de Administrador">
+    <footer class="border-t px-4 sm:px-6 py-4 flex items-center justify-between" style="border-color:var(--bg-border);background:var(--bg-surface);">
+      <span class="text-xs" style="color:var(--text-dim);">&copy; <span id="yearFooter"></span> Projeto Benício — Auditoria Crede</span>
+      <button id="btnAdmin" class="p-2 rounded-lg transition-colors cursor-pointer" style="color:var(--text-dim);" title="Configurações de Administrador">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
         </svg>
@@ -296,30 +367,30 @@
 
   <!-- MODAL DE SENHA -->
   <div id="modalOverlay" class="fixed inset-0 z-50 hidden modal-overlay flex items-center justify-center px-4">
-    <div class="animate-modal rounded-2xl border w-full max-w-sm p-6" style="background:#0d0d0d;border-color:#1e1e1e;">
+    <div class="animate-modal rounded-2xl border w-full max-w-sm p-6" style="background:var(--bg-surface-alt);border-color:var(--bg-border);">
       <div class="flex items-center gap-2.5 mb-5">
-        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="#C5A059" stroke-width="1.5">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="var(--accent)" stroke-width="1.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
         </svg>
-        <h2 class="text-base font-semibold" style="color:#f5f5f5;">Acesso Restrito</h2>
+        <h2 class="text-base font-semibold" style="color:var(--text-primary);">Acesso Restrito</h2>
       </div>
-      <p class="text-sm mb-4" style="color:#a0a0a0;">Digite a senha de administrador.</p>
+      <p class="text-sm mb-4" style="color:var(--text-muted);">Digite a senha de administrador.</p>
       <div class="space-y-3">
         <div class="relative">
           <input id="inputSenha" type="password" placeholder="Senha"
             class="input-gold w-full px-3 py-2.5 pr-10 rounded-lg text-sm"
-            onfocus="this.style.borderColor='#C5A059';this.style.boxShadow='0 0 0 2px #C5A05920'"
-            onblur="this.style.borderColor='#1e1e1e';this.style.boxShadow='none'" />
+            onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 2px var(--accent-dim-20)'"
+            onblur="this.style.borderColor='var(--bg-border)';this.style.boxShadow='none'" />
           <button id="btnMostrarSenha" type="button"
             class="absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer transition-colors"
-            style="color:#a0a0a0;" tabindex="-1" aria-label="Mostrar/ocultar senha">
+            style="color:var(--text-muted);" tabindex="-1" aria-label="Mostrar/ocultar senha">
             <svg id="iconSenha" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
             </svg>
           </button>
         </div>
-        <p id="senhaErro" class="text-xs hidden flex items-center gap-1" style="color:#ef4444;">
+        <p id="senhaErro" class="text-xs hidden flex items-center gap-1" style="color:var(--accent);">
           <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
@@ -576,9 +647,9 @@
         let html = '';
         dadosCalc.forEach(p => {
           html += '<tr>' +
-            '<td class="font-medium" style="color:#f5f5f5;">' + p.qtd + 'x</td>' +
-            '<td class="text-right" style="color:#a0a0a0;">' + fmtMoeda(p.parcela) + '</td>' +
-            '<td class="text-right font-semibold" style="color:#C5A059;">' + fmtMoeda(p.valorFinal) + '</td>' +
+            '<td class="font-medium" style="color:var(--text-primary);">' + p.qtd + 'x</td>' +
+            '<td class="text-right" style="color:var(--text-muted);">' + fmtMoeda(p.parcela) + '</td>' +
+            '<td class="text-right font-semibold" style="color:var(--accent);">' + fmtMoeda(p.valorFinal) + '</td>' +
           '</tr>';
         });
         tabelaBody.innerHTML = html;
@@ -736,6 +807,40 @@
       console.log('🔐 Senha admin:', ADMIN_PASSWORD);
       console.log('📊 Tabela Master/Visa:', TAXAS_PADRAO['master-visa'].taxas);
       console.log('📊 Tabela Elo/Outras:', TAXAS_PADRAO['elo-outras'].taxas);
+
+      // ===========================================================
+      // 14. TEMA CLARO / ESCURO
+      // ===========================================================
+      const btnTema = $('#btnTema');
+      const temaIcon = $('#temaIcon');
+      const THEME_KEY = 'projetoBenicio_tema';
+
+      function aplicarTema(tema) {
+        if (tema === 'light') {
+          document.body.classList.add('light');
+          temaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />';
+        } else {
+          document.body.classList.remove('light');
+          temaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />';
+        }
+        try { localStorage.setItem(THEME_KEY, tema); } catch (e) {}
+      }
+
+      function initTema() {
+        let tema = 'dark';
+        try { tema = localStorage.getItem(THEME_KEY); } catch (e) {}
+        if (!tema) {
+          tema = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        aplicarTema(tema);
+      }
+
+      btnTema.addEventListener('click', function() {
+        const isLight = document.body.classList.contains('light');
+        aplicarTema(isLight ? 'dark' : 'light');
+      });
+
+      initTema();
 
     })();
   </script>

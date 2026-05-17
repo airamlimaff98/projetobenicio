@@ -1,4 +1,6 @@
 {
-  "outputDirectory": ".",
-  "framework": null
+  "framework": "vite",
+  "buildCommand": "vite build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install"
 }

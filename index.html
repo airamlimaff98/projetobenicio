@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulador de Empréstimo — Auditoria Crede</title>
+  <title>Simulador de Empréstimo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -199,8 +199,8 @@
       <div class="flex items-center gap-2.5">
         <div class="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold" style="background:var(--accent);color:var(--btn-gold-text);">P</div>
         <div>
-          <span class="font-semibold text-sm sm:text-base" style="color:var(--text-primary);">Projeto Benício</span>
-          <span class="hidden sm:inline text-xs ml-2" style="color:var(--text-muted);">Auditoria Crede</span>
+          <span class="font-semibold text-sm sm:text-base" style="color:var(--text-primary);">comvocecred</span>
+          <span class="hidden sm:inline text-xs ml-2" style="color:var(--text-muted);">Simulador</span>
         </div>
         <div class="flex items-center gap-2">
           <button id="btnTema" class="theme-btn" title="Alternar tema claro/escuro" type="button">
@@ -226,7 +226,7 @@
             </svg>
           </div>
           <h1 class="text-xl sm:text-2xl font-bold" style="color:var(--text-primary);">Simulador de Empréstimo</h1>
-          <p class="text-sm mt-1" style="color:var(--text-muted);">Calcule as parcelas conforme a tabela Auditoria Crede</p>
+          <p class="text-sm mt-1" style="color:var(--text-muted);">Calcule as parcelas conforme a tabela </p>
         </div>
 
         <!-- Abas de banco -->
@@ -281,7 +281,7 @@
               <tbody id="tabelaBody"></tbody>
             </table>
           </div>
-          <p class="text-xs text-center mt-2" style="color:var(--text-dim);">* Conforme tabela Auditoria Crede</p>
+          <p class="text-xs text-center mt-2" style="color:var(--text-dim);">* Conforme tabela </p>
         </div>
 
         <!-- Estado vazio -->
@@ -356,7 +356,7 @@
 
     <!-- FOOTER com cadeado -->
     <footer class="border-t px-4 sm:px-6 py-4 flex items-center justify-between" style="border-color:var(--bg-border);background:var(--bg-surface);">
-      <span class="text-xs" style="color:var(--text-dim);">&copy; <span id="yearFooter"></span> Projeto Benício — Auditoria Crede</span>
+      <span class="text-xs" style="color:var(--text-dim);">&copy; <span id="yearFooter"></span> comvocecred </span>
       <button id="btnAdmin" class="p-2 rounded-lg transition-colors cursor-pointer" style="color:var(--text-dim);" title="Configurações de Administrador">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -483,7 +483,7 @@
       //      automaticamente no navegador. Ao recarregar a página,
       //      os valores personalizados são restaurados.
       // ===========================================================
-      const STORAGE_KEY = 'auditoriaCrede_dados';
+      const STORAGE_KEY = 'comvocecred_dados';
 
       // Cópia editável
       const dados = {};
@@ -803,7 +803,7 @@
 
       renderizarTabela();
 
-      console.log('✅ Simulador Auditoria Crede (com Juros de Entrada %)');
+      console.log('✅ Simulador  (com Juros de Entrada %)');
       console.log('🔐 Senha admin:', ADMIN_PASSWORD);
       console.log('📊 Tabela Master/Visa:', TAXAS_PADRAO['master-visa'].taxas);
       console.log('📊 Tabela Elo/Outras:', TAXAS_PADRAO['elo-outras'].taxas);
